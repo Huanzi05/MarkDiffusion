@@ -1,5 +1,5 @@
 {
-    "algorithm_name": "PRC",
+    "algorithm_name": "VideoMark",
     "fpr": 1e-9,
     "prc_t": 3,
     "var": 1.5,
