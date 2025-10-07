@@ -33,7 +33,9 @@ As the MarkDiffusion repository content becomes increasingly rich and its size g
 
 ## Updates
 🔥 (2025.10.07) Add [SFW](https://arxiv.org/pdf/2509.07647) watermarking method, thanks Huan Wang for her PR!
+
 🔥 (2025.10.07) Add [VideoMark](https://arxiv.org/abs/2504.16359) watermarking method, thanks Hanqian Li for his PR!
+
 🔥 (2025.9.29) Add [GaussMarker](https://arxiv.org/abs/2506.11444) watermarking method, thanks Luyang Si for his PR!
 
 ## Introduction to MarkDiffusion
