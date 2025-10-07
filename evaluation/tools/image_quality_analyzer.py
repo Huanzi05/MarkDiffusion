@@ -6,7 +6,7 @@ import torch.nn.functional as F
 import numpy as np
 from abc import abstractmethod
 import lpips
-from imquality import brisque
+import piq
 
 class ImageQualityAnalyzer:
     """Base class for image quality analyzer."""
@@ -986,3 +986,127 @@ class SSIMAnalyzer(ComparedImageQualityAnalyzer):
         ssim = luminance_mean * contrast * structure_comparison
 
         return float(ssim)
+    
+
+class BRISQUEAnalyzer(DirectImageQualityAnalyzer):
+    """BRISQUE analyzer for no-reference image quality analysis.
+    
+    BRISQUE (Blind/Referenceless Image Spatial Quality Evaluator)
+    evaluates perceptual quality of an image without requiring
+    a reference. Lower BRISQUE scores indicate better quality.
+    Typical range: 0 (best) ~ 100 (worst).
+    """
+    
+    def __init__(self, device: str = "cuda"):
+        super().__init__()
+        self.device = torch.device(device if torch.cuda.is_available() else "cpu")
+
+    def _preprocess(self, image: Image.Image) -> torch.Tensor:
+        """Convert PIL Image to tensor in range [0,1] with shape (1,C,H,W)."""
+        if image.mode != 'RGB':
+            image = image.convert('RGB')
+        arr = np.array(image).astype(np.float32) / 255.0
+        tensor = torch.from_numpy(arr).permute(2, 0, 1).unsqueeze(0)  # BCHW
+        return tensor.to(self.device)
+
+    def analyze(self, image: Image.Image, *args, **kwargs) -> float:
+        """Calculate BRISQUE score for a single image.
+        
+        Args:
+            image: PIL Image
+        
+        Returns:
+            float: BRISQUE score (lower is better)
+        """
+        x = self._preprocess(image)
+        with torch.no_grad():
+            score = piq.brisque(x, data_range=1.0)  # piq expects [0,1]
+        return float(score.item())
+    
+    
+class VIFAnalyzer(ComparedImageQualityAnalyzer):
+    """VIF (Visual Information Fidelity) analyzer using piq.
+    
+    VIF compares a distorted image with a reference image to 
+    quantify the amount of visual information preserved.
+    Higher VIF indicates better quality/similarity.
+    Typical range: 0 ~ 1 (sometimes higher for good quality).
+    """
+    
+    def __init__(self, device: str = "cuda"):
+        super().__init__()
+        self.device = torch.device(device if torch.cuda.is_available() else "cpu")
+
+    def _preprocess(self, image: Image.Image) -> torch.Tensor:
+        """Convert PIL Image to tensor in range [0,1] with shape (1,C,H,W)."""
+        if image.mode != 'RGB':
+            image = image.convert('RGB')
+        arr = np.array(image).astype(np.float32) / 255.0
+        tensor = torch.from_numpy(arr).permute(2, 0, 1).unsqueeze(0)  # BCHW
+        return tensor.to(self.device)
+
+    def analyze(self, image: Image.Image, reference: Image.Image, *args, **kwargs) -> float:
+        """Calculate VIF score between image and reference.
+        
+        Args:
+            image: Distorted/test image (PIL)
+            reference: Reference image (PIL)
+        
+        Returns:
+            float: VIF score (higher is better)
+        """
+        x = self._preprocess(image)
+        y = self._preprocess(reference)
+        
+        # Ensure same size (piq expects matching shapes)
+        if x.shape != y.shape:
+            _, _, h, w = x.shape
+            y = torch.nn.functional.interpolate(y, size=(h, w), mode='bilinear', align_corners=False)
+        
+        with torch.no_grad():
+            score = piq.vif_p(x, y, data_range=1.0)
+        return float(score.item())
+    
+    
+class FSIMAnalyzer(ComparedImageQualityAnalyzer):
+    """FSIM (Feature Similarity Index) analyzer using piq.
+    
+    FSIM compares structural similarity between two images 
+    based on phase congruency and gradient magnitude.
+    Higher FSIM indicates better quality/similarity.
+    Typical range: 0 ~ 1.
+    """
+    
+    def __init__(self, device: str = "cuda"):
+        super().__init__()
+        self.device = torch.device(device if torch.cuda.is_available() else "cpu")
+
+    def _preprocess(self, image: Image.Image) -> torch.Tensor:
+        """Convert PIL Image to tensor in range [0,1] with shape (1,C,H,W)."""
+        if image.mode != 'RGB':
+            image = image.convert('RGB')
+        arr = np.array(image).astype(np.float32) / 255.0
+        tensor = torch.from_numpy(arr).permute(2, 0, 1).unsqueeze(0)  # BCHW
+        return tensor.to(self.device)
+
+    def analyze(self, image: Image.Image, reference: Image.Image, *args, **kwargs) -> float:
+        """Calculate FSIM score between image and reference.
+        
+        Args:
+            image: Distorted/test image (PIL)
+            reference: Reference image (PIL)
+        
+        Returns:
+            float: FSIM score (higher is better)
+        """
+        x = self._preprocess(image)
+        y = self._preprocess(reference)
+
+        # Ensure same size
+        if x.shape != y.shape:
+            _, _, h, w = x.shape
+            y = torch.nn.functional.interpolate(y, size=(h, w), mode='bilinear', align_corners=False)
+        
+        with torch.no_grad():
+            score = piq.fsim(x, y, data_range=1.0)
+        return float(score.item())

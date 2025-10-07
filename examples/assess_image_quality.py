@@ -31,7 +31,7 @@ from evaluation.pipelines.image_quality_analysis import (
 )
 from evaluation.tools.image_quality_analyzer import (
 NIQECalculator, 
-CLIPScoreCalculator, FIDCalculator, InceptionScoreCalculator, LPIPSAnalyzer, PSNRAnalyzer,SSIMAnalyzer)
+CLIPScoreCalculator, FIDCalculator, InceptionScoreCalculator, LPIPSAnalyzer, PSNRAnalyzer,SSIMAnalyzer, BRISQUEAnalyzer,VIFAnalyzer,FSIMAnalyzer)
 from utils.diffusion_config import DiffusionConfig
 from diffusers import DPMSolverMultistepScheduler, StableDiffusionPipeline
 import dotenv
@@ -42,7 +42,7 @@ dotenv.load_dotenv()
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 model_path = "/data2/shared_model/fuzheyu/stable-diffusion-2-1-base/"
 """
-    DirectImageQualityAnalysisPipeline: PSNRAnalyzer, SSIMAnalyzer
+    DirectImageQualityAnalysisPipeline: PSNRAnalyzer, SSIMAnalyzer,BRISQUEAnalyzer
     ReferencedImageQualityAnalysisPipeline: CLIPScoreCalculator
     GroupImageQualityAnalysisPipeline: FIDCalculator, InceptionScoreCalculator
     RepeatImageQualityAnalysisPipeline: LPIPSAnalyzer
@@ -135,10 +135,36 @@ def assess_image_quality(algorithm_name, metric, max_samples=10):
         
     elif metric == 'SSIM':
         my_dataset = StableDiffusionPromptsDataset(max_samples=max_samples)
-        pipeline = DirectImageQualityAnalysisPipeline(dataset=my_dataset, 
+        pipeline = ComparedImageQualityAnalysisPipeline(dataset=my_dataset, 
                                                      watermarked_image_editor_list=[],
                                                      unwatermarked_image_editor_list=[],
                                                      analyzers=[SSIMAnalyzer()],
+                                                     show_progress=True, 
+                                                     return_type=QualityPipelineReturnType.MEAN_SCORES)
+        
+    elif metric == 'BRISQUE':
+        my_dataset = StableDiffusionPromptsDataset(max_samples=max_samples)
+        pipeline = DirectImageQualityAnalysisPipeline(dataset=my_dataset, 
+                                                     watermarked_image_editor_list=[],
+                                                     unwatermarked_image_editor_list=[],
+                                                     analyzers=[BRISQUEAnalyzer()],
+                                                     show_progress=True, 
+                                                     return_type=QualityPipelineReturnType.MEAN_SCORES)
+        
+    elif metric == 'VIF':
+        my_dataset = StableDiffusionPromptsDataset(max_samples=max_samples)
+        pipeline = ComparedImageQualityAnalysisPipeline(dataset=my_dataset, 
+                                                     watermarked_image_editor_list=[],
+                                                     unwatermarked_image_editor_list=[],
+                                                     analyzers=[VIFAnalyzer()],
+                                                     show_progress=True, 
+                                                     return_type=QualityPipelineReturnType.MEAN_SCORES)
+    elif metric == 'FSIM':
+        my_dataset = StableDiffusionPromptsDataset(max_samples=max_samples)
+        pipeline = ComparedImageQualityAnalysisPipeline(dataset=my_dataset, 
+                                                     watermarked_image_editor_list=[],
+                                                     unwatermarked_image_editor_list=[],
+                                                     analyzers=[FSIMAnalyzer()],
                                                      show_progress=True, 
                                                      return_type=QualityPipelineReturnType.MEAN_SCORES)
     else:
