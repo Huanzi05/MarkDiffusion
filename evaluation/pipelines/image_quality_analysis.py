@@ -325,7 +325,7 @@ class DirectImageQualityAnalysisPipeline(ImageQualityAnalysisPipeline):
     
     This class analyzes the quality of images by directly comparing the characteristics 
     of watermarked images with unwatermarked images. It evaluates metrics such as PSNR, 
-    SSIM, LPIPS, FID without the need for any external reference image.
+    SSIM, LPIPS, FID, BRISQUE without the need for any external reference image.
     
     Use this pipeline to assess the impact of watermarking on image quality directly.
     """
@@ -583,7 +583,7 @@ class ComparedImageQualityAnalysisPipeline(ImageQualityAnalysisPipeline):
     Pipeline for compared image quality analysis.
     
     This pipeline directly compares watermarked and unwatermarked images
-    to compute metrics like PSNR, SSIM, and MS-SSIM. The analyzer receives
+    to compute metrics like PSNR, SSIM, VIF, FSIM and MS-SSIM. The analyzer receives
     both images and outputs a single comparison score.
     """
 
