@@ -113,9 +113,9 @@ MarkDiffusion supports eight pipelines, two for detection (WatermarkedMediaDetec
 | PSNRAnalyzer | Quality (Image) | Peak Signal-to-Noise Ratio, measuring image distortion | PSNR value (dB) |
 | NIQECalculator | Quality (Image) | Natural Image Quality Evaluator, reference-free quality assessment | NIQE score |
 | SSIMAnalyzer | Quality (Image) | Structural Similarity Index between two images | SSIM value |
-| BRISQUEAnalyzer | Quality (Image) | Blind/Referenceless Image Spatial Quality Evaluator, evaluates perceptual quality of an image without requiring a reference | BRISQUE score |
-| VIFAnalyzer | Quality (Image) | Visual Information Fidelity analyzer, compares a distorted image with a reference image to quantify the amount of visual information preserved | VIF value |
-| FSIMAnalyzer | Quality (Image) | Feature Similarity Index analyzer, compares structural similarity between two images based on phase congruency and gradient magnitude | FSIM value |
+| BRISQUEAnalyzer | Quality (Image) | Blind/Referenceless Image Spatial Quality Evaluator, evaluating perceptual quality of an image without requiring a reference | BRISQUE score |
+| VIFAnalyzer | Quality (Image) | Visual Information Fidelity analyzer, comparing a distorted image with a reference image to quantify the amount of visual information preserved | VIF value |
+| FSIMAnalyzer | Quality (Image) | Feature Similarity Index analyzer, comparing structural similarity between two images based on phase congruency and gradient magnitude | FSIM value |
 | **Video Quality Analyzers** | | | |
 | SubjectConsistencyAnalyzer | Quality (Video) | Evaluate consistency of subject objects in video | Subject consistency score |
 | BackgroundConsistencyAnalyzer | Quality (Video) | Evaluate background coherence and stability in video | Background consistency score |
