@@ -200,13 +200,18 @@ class AdaptiveNoiseInjection(ImageEditor):
     
     def _add_salt_pepper_noise(self, img_array, amount):
         noisy = img_array.copy()
-        num_salt = int(amount * img_array.size * 0.5)
-        salt_coords = [np.random.randint(0, i, num_salt) for i in img_array.shape]
-        noisy[tuple(salt_coords)] = 255
+        h, w = img_array.shape[:2]
+        num_pixels = h * w
         
-        num_pepper = int(amount * img_array.size * 0.5)
-        pepper_coords = [np.random.randint(0, i, num_pepper) for i in img_array.shape]
-        noisy[tuple(pepper_coords)] = 0
+        num_salt = int(amount * num_pixels * 0.5)
+        salt_coords_y = np.random.randint(0, h, num_salt)
+        salt_coords_x = np.random.randint(0, w, num_salt)
+        noisy[salt_coords_y, salt_coords_x] = 255
+        
+        num_pepper = int(amount * num_pixels * 0.5)
+        pepper_coords_y = np.random.randint(0, h, num_pepper)
+        pepper_coords_x = np.random.randint(0, w, num_pepper)
+        noisy[pepper_coords_y, pepper_coords_x] = 0
         
         return noisy
     
