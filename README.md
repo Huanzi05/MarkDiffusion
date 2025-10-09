@@ -107,6 +107,9 @@ MarkDiffusion supports eight pipelines, two for detection (WatermarkedMediaDetec
 | MPEG4Compression | Robustness (Video) | MPEG-4 video compression attack, testing video watermark compression robustness | Compressed video frames |
 | FrameAverage | Robustness (Video) | Frame averaging attack, destroying watermarks through inter-frame averaging | Averaged video frames |
 | FrameSwap | Robustness (Video) | Frame swapping attack, testing robustness by changing frame sequences | Swapped video frames |
+| VideoCodecAttack | Robustness (Video) | Codec re-encoding attack simulating platform transcoding (H.264/H.265/VP9/AV1) | Re-encoded video frames |
+| FrameRateAdapter | Robustness (Video) | Frame rate conversion attack that resamples frames while preserving duration | Resampled frame sequence |
+| FrameInterpolationAttack | Robustness (Video) | Frame interpolation attack inserting blended frames to alter temporal density | Interpolated video frames |
 | **Image Quality Analyzers** | | | |
 | InceptionScoreCalculator | Quality (Image) | Evaluate generated image quality and diversity | IS score |
 | FIDCalculator | Quality (Image) | Fréchet Inception Distance, measuring distribution difference between generated and real images | FID value |
