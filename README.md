@@ -107,6 +107,9 @@ MarkDiffusion supports eight pipelines, two for detection (WatermarkedMediaDetec
 | GaussianBlurring | Robustness (Image) | Gaussian blur attack, evaluating watermark resistance to blur processing | Blurred images/frames |
 | JPEGCompression | Robustness (Image) | JPEG compression attack, testing watermark robustness to lossy compression | Compressed images/frames |
 | Brightness | Robustness (Image) | Brightness adjustment attack, evaluating watermark resistance to brightness changes | Brightness-modified images/frames |
+| Mask | Robustness (Image) | Image masking attack, testing watermark resistance to partial occlusion by random black rectangles | Masked images/frames |
+| Overlay | Robustness (Image) | Image overlay attack, testing watermark resistance to graffiti-style strokes and annotations | Overlaid images/frames |
+| AdaptiveNoiseInjection | Robustness (Image) | Adaptive noise injection attack, testing watermark resistance to content-aware noise (Gaussian/Salt-pepper/Poisson/Speckle) | Noisy images/frames with adaptive noise |
 | **Video Attack Tools** | | | |
 | MPEG4Compression | Robustness (Video) | MPEG-4 video compression attack, testing video watermark compression robustness | Compressed video frames |
 | FrameAverage | Robustness (Video) | Frame averaging attack, destroying watermarks through inter-frame averaging | Averaged video frames |
