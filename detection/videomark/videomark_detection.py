@@ -257,7 +257,7 @@ class VideoMarkDetector(BaseDetector):
                 logger.info("Truncated to the first %d frames for detection.", frames_to_use)
 
         if frames_to_use <= 1:
-            logger.error("There is no enough frame for VideoMark detection.")
+            logger.error("There are not enough frames for VideoMark detection.")
             return {
                 'is_watermarked': False,
                 "bit_acc": 0.0,
@@ -272,7 +272,7 @@ class VideoMarkDetector(BaseDetector):
         message_length = self.message_sequence.shape[1]
         message_sequence_str = [self.bits_to_string(msg) for msg in self.message_sequence]
 
-        for frame_index in range(1, frames_to_use):
+        for frame_index in range(frames_to_use):
             frame_latents = latents[:, :, frame_index, ...].to(torch.float64)
             reversed_prc = self._recover_posteriors(
                 frame_latents.flatten().cpu(),
@@ -305,7 +305,7 @@ class VideoMarkDetector(BaseDetector):
             idx_list, message_list, distance_list, message_length
         )
 
-        watermark_reference = np.asarray(self.watermark[1:frames_to_use])
+        watermark_reference = np.asarray(self.watermark[:frames_to_use])
         recovered_message = np.asarray(recovered_message)
 
         if recovered_message.size == 0 or watermark_reference.size == 0:
