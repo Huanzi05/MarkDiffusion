@@ -145,17 +145,17 @@ class PRCDetector(BaseDetector):
         # Join the characters to form the original string
         return ''.join(chars)
         
-    def eval_watermark(self, reversed_latents: torch.Tensor, reference_latents: torch.Tensor = None, detector_type: str = "is_watermark") -> float:
+    def eval_watermark(self, reversed_latents: torch.Tensor, reference_latents: torch.Tensor = None, detector_type: str = "is_watermarked") -> float:
         """Evaluate watermark in reversed latents."""
-        if detector_type != 'is_watermark':
-            raise ValueError(f'Detector type {detector_type} is not supported for PRC. Use "is_watermark" instead.')
+        if detector_type != 'is_watermarked':
+            raise ValueError(f'Detector type {detector_type} is not supported for PRC. Use "is_watermarked" instead.')
         reversed_prc = self._recover_posteriors(reversed_latents.to(torch.float64).flatten().cpu(), variances=self.var).flatten().cpu()
         self.recovered_prc = reversed_prc
         detect_result, score = self._detect_watermark(reversed_prc)
         decoding_result = self._decode_message(reversed_prc)
         if decoding_result is None:
             return {
-                'is_watermark': False,
+                'is_watermarked': False,
                 "score": score, # Keep the score for potential future use
                 'decoding_result': decoding_result,
                 "decoded_message": None
@@ -164,7 +164,7 @@ class PRCDetector(BaseDetector):
         combined_result = detect_result or (decoding_result is not None)
         print(f"detection_result: {detect_result}, decoding_result: {decoding_result}, combined_result: {combined_result}")
         return {
-            'is_watermark': bool(combined_result),
+            'is_watermarked': bool(combined_result),
             "score": score, # Keep the score for potential future use
             'decoding_result': decoding_result,
             "decoded_message": decoded_message

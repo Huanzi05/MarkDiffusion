@@ -534,26 +534,26 @@ class GMUtils:
 				raise AttributeError("Unsupported fuser model: missing predict_proba/decision_function")
 			metrics["fused_score"] = fused_score
 			metrics["fused_threshold"] = float(self.fuser_threshold)
-			metrics["is_watermark"] = bool(fused_score >= self.fuser_threshold)
+			metrics["is_watermarked"] = bool(fused_score >= self.fuser_threshold)
 		else:
-			metrics["is_watermark"] = bool(decision_bit_accuracy >= decision_threshold)
+			metrics["is_watermarked"] = bool(decision_bit_accuracy >= decision_threshold)
 		if gnr_bit_accuracy is not None:
 			metrics["gnr_threshold"] = float(decision_threshold if self.config.gnr_use_for_decision and self.config.gnr_threshold is not None else threshold)
 
-		if detector_type == "is_watermark":
-			return {"is_watermark": metrics["is_watermark"]}
+		if detector_type == "is_watermarked":
+			return {"is_watermarked": metrics["is_watermarked"]}
 		if detector_type == "gnr_bit_acc" and gnr_bit_accuracy is not None:
 			selected_threshold = decision_threshold if self.config.gnr_use_for_decision and self.config.gnr_threshold is not None else threshold
 			return {
 				"gnr_bit_accuracy": float(gnr_bit_accuracy),
 				"threshold": float(selected_threshold),
-				"is_watermark": bool(gnr_bit_accuracy >= selected_threshold),
+				"is_watermarked": bool(gnr_bit_accuracy >= selected_threshold),
 			}
 		if detector_type == "fused" and fused_score is not None:
 			return {
 				"fused_score": float(fused_score),
 				"threshold": float(self.fuser_threshold),
-				"is_watermark": bool(fused_score >= self.fuser_threshold),
+				"is_watermarked": bool(fused_score >= self.fuser_threshold),
 			}
 		return metrics
 

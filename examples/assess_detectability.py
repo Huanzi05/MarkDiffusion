@@ -69,7 +69,7 @@ def assess_binary_detectability(algorithm_name, labels, rules, target_fpr):
         dataset=my_dataset, 
         media_editor_list=[],
         show_progress=True, 
-        detector_type="is_watermark",
+        detector_type="is_watermarked",
         return_type=DetectionPipelineReturnType.IS_WATERMARKED
     )
     
@@ -78,7 +78,7 @@ def assess_binary_detectability(algorithm_name, labels, rules, target_fpr):
         media_editor_list=[], 
         media_source_mode="generated",
         show_progress=True, 
-        detector_type="is_watermark",
+        detector_type="is_watermarked",
         return_type=DetectionPipelineReturnType.IS_WATERMARKED
     )
 

@@ -254,34 +254,34 @@ class GMDetector(BaseDetector):
 			metrics["fused_threshold"] = fused_threshold
 
 		if detector_type == "message_acc":
-			is_watermark = message_acc >= self.message_threshold
+			is_watermarked = message_acc >= self.message_threshold
 		elif detector_type == "complex_l1":
 			threshold = self.l1_threshold if self.l1_threshold is not None else self.threshold
-			is_watermark = complex_l1 <= threshold
+			is_watermarked = complex_l1 <= threshold
 		elif detector_type == "signal_acc":
 			if signal_acc is None:
 				raise ValueError("Signal accuracy requested but watermark measurement does not use signal mode.")
-			is_watermark = signal_acc >= self.threshold
+			is_watermarked = signal_acc >= self.threshold
 		elif detector_type == "gnr_bit_acc":
 			if gnr_bit_acc is None:
 				raise ValueError("GNR checkpoint not provided, cannot compute GNR-based accuracy.")
-			is_watermark = gnr_bit_acc >= decision_threshold
+			is_watermarked = gnr_bit_acc >= decision_threshold
 		elif detector_type == "fused":
 			if fused_score is None:
 				raise ValueError("Fuser checkpoint not provided, cannot compute fused score.")
-			is_watermark = fused_score >= fused_threshold
+			is_watermarked = fused_score >= fused_threshold
 		elif detector_type == "all":
 			if fused_score is not None:
-				is_watermark = fused_score >= fused_threshold
+				is_watermarked = fused_score >= fused_threshold
 			else:
-				is_watermark = decision_bit_acc >= decision_threshold
+				is_watermarked = decision_bit_acc >= decision_threshold
 		else:
-			if detector_type in {"bit_acc", "is_watermark"} and fused_score is not None:
-				is_watermark = fused_score >= fused_threshold
-			elif detector_type in {"bit_acc", "is_watermark"}:
-				is_watermark = decision_bit_acc >= decision_threshold
+			if detector_type in {"bit_acc", "is_watermarked"} and fused_score is not None:
+				is_watermarked = fused_score >= fused_threshold
+			elif detector_type in {"bit_acc", "is_watermarked"}:
+				is_watermarked = decision_bit_acc >= decision_threshold
 			else:
 				raise ValueError(f"Unsupported detector_type '{detector_type}' for GaussMarker.")
 
-		metrics["is_watermark"] = bool(is_watermark)
+		metrics["is_watermarked"] = bool(is_watermarked)
 		return metrics

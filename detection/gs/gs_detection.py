@@ -98,7 +98,7 @@ class GSDetector(BaseDetector):
         correct = (reversed_watermark == self.watermark).float().mean().item()
         
         return {
-            'is_watermark': bool(correct > self.threshold),
+            'is_watermarked': bool(correct > self.threshold),
             'bit_acc': correct
         }
         

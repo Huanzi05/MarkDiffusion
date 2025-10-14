@@ -40,7 +40,7 @@ class ROBINDetector(BaseDetector):
             l1_distance = torch.abs(reversed_latents_fft[self.watermarking_mask] - target_patch[self.watermarking_mask]).mean().item()
             print(f"l1_distance: {l1_distance}")
             return {
-                'is_watermark': bool(l1_distance < self.threshold), 
+                'is_watermarked': bool(l1_distance < self.threshold), 
                 'l1_distance': l1_distance
             }
         elif detector_type == 'p_value':
@@ -53,7 +53,7 @@ class ROBINDetector(BaseDetector):
             x = (((reversed_latents_fft_wm_area - target_patch) / sigma_) ** 2).sum().item()
             p = ncx2.cdf(x=x, df=len(target_patch), nc=lambda_)
             return {
-                'is_watermark': p < self.threshold, 
+                'is_watermarked': p < self.threshold, 
                 'p_value': p
             }
         elif detector_type == 'cosine_similarity':
@@ -61,7 +61,7 @@ class ROBINDetector(BaseDetector):
             target_patch = self.gt_patch[self.watermarking_mask].flatten()
             cosine_similarity = F.cosine_similarity(reversed_latents_fft_wm_area.real, target_patch.real, dim=0)
             return {
-                'is_watermark': cosine_similarity > self.threshold, 
+                'is_watermarked': cosine_similarity > self.threshold, 
                 'cosine_similarity': cosine_similarity
             }
         else:

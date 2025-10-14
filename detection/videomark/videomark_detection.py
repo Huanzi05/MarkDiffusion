@@ -180,7 +180,7 @@ class VideoMarkDetector(BaseDetector):
 
 
 
-    def eval_watermark(self, reversed_latents: torch.Tensor, reference_latents: torch.Tensor = None, detector_type: str = "is_watermark") -> float:
+    def eval_watermark(self, reversed_latents: torch.Tensor, reference_latents: torch.Tensor = None, detector_type: str = "is_watermarked") -> float:
         """Evaluate watermark in reversed latents."""
         if detector_type != 'bit_acc':
             raise ValueError(f'Detector type {detector_type} is not supported for VideoMark. Use "bit_acc" instead.')
@@ -227,7 +227,7 @@ class VideoMarkDetector(BaseDetector):
         bit_acc = np.mean(recovered_message == self.watermark[1:])
 
         return {
-            'is_watermark' : float(bit_acc) >= self.threshold,
+            'is_watermarked' : float(bit_acc) >= self.threshold,
             "bit_acc": float(bit_acc),
             "recovered_index": recovered_index,
             "recovered_message": recovered_message,

@@ -97,7 +97,7 @@ class WatermarkDetectionPipeline:
         elif self.return_type == DetectionPipelineReturnType.SCORES:
             return [result.detect_result[self.detector_type] for result in evaluation_results]
         elif self.return_type == DetectionPipelineReturnType.IS_WATERMARKED:
-            return [result.detect_result['is_watermark'] for result in evaluation_results]
+            return [result.detect_result['is_watermarked'] for result in evaluation_results]
     
 class WatermarkedMediaDetectionPipeline(WatermarkDetectionPipeline):
     def __init__(self, dataset: BaseDataset, media_editor_list: List[Union[ImageEditor, VideoEditor]], 

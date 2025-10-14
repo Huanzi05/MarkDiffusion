@@ -37,7 +37,7 @@ class TRDetector(BaseDetector):
             target_patch = self.gt_patch #[self.watermarking_mask].flatten()
             l1_distance = torch.abs(reversed_latents_fft[self.watermarking_mask] - target_patch[self.watermarking_mask]).mean().item()
             return {
-                'is_watermark': l1_distance < self.threshold, 
+                'is_watermarked': l1_distance < self.threshold, 
                 'l1_distance': l1_distance
             }
         elif detector_type == 'p_value':
@@ -50,7 +50,7 @@ class TRDetector(BaseDetector):
             x = (((reversed_latents_fft - target_patch) / sigma_) ** 2).sum().item()
             p = ncx2.cdf(x=x, df=len(target_patch), nc=lambda_)
             return {
-                'is_watermark': bool(p < self.threshold), 
+                'is_watermarked': bool(p < self.threshold), 
                 'p_value': p
             }
         else:

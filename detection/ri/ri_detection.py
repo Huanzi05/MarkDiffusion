@@ -129,7 +129,7 @@ class RIDetector(BaseDetector):
         min_dist = all_distances[min_idx]
         
         return {
-            'is_watermark': bool(min_dist < self.threshold),
+            'is_watermarked': bool(min_dist < self.threshold),
             'l1_distance': min_dist
         }
         
