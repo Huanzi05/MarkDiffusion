@@ -1,23 +1,3 @@
-# Contributing to MarkDiffusion
-
-Everyone is welcome to contribute, and we value everybody's contribution. Code contributions are not the only way to help the community. Answering questions, helping others, and improving the documentation are also immensely valuable.
-
-It also helps us if you spread the word! Reference the library in blog posts about the awesome projects it made possible, shout out on Twitter/X every time it has helped you, or simply ⭐️ the repository to say thank you.
-
-However you choose to contribute, please be mindful and respect our [code of conduct](CODE_OF_CONDUCT.md).
-
-## Ways to contribute
-
-There are several ways you can contribute to MarkDiffusion:
-
-* Fix outstanding issues with the existing code.
-* Submit issues related to bugs or desired new features.
-* Contribute to the examples or to the documentation.
-
-### Style guide
-
-MarkDiffusion generally follows the [Google Python Style Guide](https://google.github.io/styleguide/pyguide.html) (or standard PEP 8). Please ensure your code is readable and well-commented.
-
 ### Create a Pull Request
 
 1. Fork the [repository](https://github.com/THU-BPM/MarkDiffusion) by clicking on the [Fork](https://github.com/THU-BPM/MarkDiffusion/fork) button on the repository's page. This creates a copy of the code under your GitHub user account.
@@ -28,15 +8,19 @@ MarkDiffusion generally follows the [Google Python Style Guide](https://google.g
 # Replace [username] with your GitHub username
 git clone git@github.com:[username]/MarkDiffusion.git
 cd MarkDiffusion
-git remote add upstream [https://github.com/THU-BPM/MarkDiffusion.git](https://github.com/THU-BPM/MarkDiffusion.git)
-```
+
+# Add the original repository as "upstream" to keep your fork synced
+git remote add upstream https://github.com/THU-BPM/MarkDiffusion.git
+````
 
 3.  Create a new branch to hold your development changes:
 
 <!-- end list -->
 
 ```bash
-git checkout -b dev_your_branch
+# It is good practice to sync with upstream before creating a branch
+git fetch upstream
+git checkout -b dev_your_branch upstream/main
 ```
 
 4.  Set up a development environment. We recommend using a virtual environment:
@@ -53,12 +37,7 @@ pip install -e .
 
 5.  Check code before commit:
 
-Please ensure your code passes local tests and follows the project's coding style. If you added new features, please include corresponding test cases.
-
-```bash
-# Example: run tests
-pytest
-```
+Please ensure your code passes local tests and follows the project's coding style.
 
 6.  Submit changes:
 
@@ -66,12 +45,16 @@ pytest
 
 ```bash
 git add .
-git commit -m "commit message"
+git commit -m "feat: add awesome feature"
+
+# Sync with upstream again to avoid conflicts
 git fetch upstream
 git rebase upstream/main
+
+# Push to your own fork (origin)
 git push -u origin dev_your_branch
 ```
 
-7.  Create a merge request from your branch `dev_your_branch` at [origin repo](https://github.com/THU-BPM/MarkDiffusion).
+7.  Create a Pull Request from your branch `dev_your_branch` at [your fork page](https://www.google.com/search?q=https://github.com/THU-BPM/MarkDiffusion/pulls) (GitHub will prompt you to merge into THU-BPM).
 
 <!-- end list -->
