@@ -29,3 +29,49 @@ MarkDiffusion generally follows the [Google Python Style Guide](https://google.g
 git clone git@github.com:[username]/MarkDiffusion.git
 cd MarkDiffusion
 git remote add upstream [https://github.com/THU-BPM/MarkDiffusion.git](https://github.com/THU-BPM/MarkDiffusion.git)
+```
+
+3.  Create a new branch to hold your development changes:
+
+<!-- end list -->
+
+```bash
+git checkout -b dev_your_branch
+```
+
+4.  Set up a development environment. We recommend using a virtual environment:
+
+<!-- end list -->
+
+```bash
+# Install requirements
+pip install -r requirements.txt
+
+# Install MarkDiffusion in editable mode
+pip install -e .
+```
+
+5.  Check code before commit:
+
+Please ensure your code passes local tests and follows the project's coding style. If you added new features, please include corresponding test cases.
+
+```bash
+# Example: run tests
+pytest
+```
+
+6.  Submit changes:
+
+<!-- end list -->
+
+```bash
+git add .
+git commit -m "commit message"
+git fetch upstream
+git rebase upstream/main
+git push -u origin dev_your_branch
+```
+
+7.  Create a merge request from your branch `dev_your_branch` at [origin repo](https://github.com/THU-BPM/MarkDiffusion).
+
+<!-- end list -->
